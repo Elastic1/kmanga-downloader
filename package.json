@@ -1,0 +1,29 @@
+{
+  "name": "kmanga",
+  "version": "0.0.1",
+  "description": "K-Manga downloader",
+  "main": "k-manga.js",
+  "bin": "k-manga.js",
+  "license": "MIT",
+  "scripts": {
+    "build": "pkg . --public"
+  },
+  "pkg": {
+    "targets": [
+      "node16-linux-x64",
+      "node16-macos-x64",
+      "node16-win-x64"
+    ],
+    "outputPath": "dist",
+    "assets": "node_modules/puppeteer-extra-plugin-stealth/**/*.*"
+  },
+  "devDependencies": {
+    "pkg": "^5.7.0"
+  },
+  "dependencies": {
+    "cac": "^6.7.12",
+    "puppeteer": "^14.3.0",
+    "puppeteer-extra": "^3.2.3",
+    "puppeteer-extra-plugin-stealth": "^2.9.0"
+  }
+}
