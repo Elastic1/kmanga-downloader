@@ -1,6 +1,6 @@
 {
   "name": "kmanga",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "K-Manga downloader",
   "main": "k-manga.js",
   "bin": "k-manga.js",
@@ -9,11 +9,7 @@
     "build": "pkg . --public"
   },
   "pkg": {
-    "targets": [
-      "node16-linux-x64",
-      "node16-macos-x64",
-      "node16-win-x64"
-    ],
+    "targets": ["node16-win-x64"],
     "outputPath": "dist",
     "assets": "node_modules/puppeteer-extra-plugin-stealth/**/*.*"
   },
