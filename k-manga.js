@@ -4,6 +4,7 @@ const fs = require('fs')
 const path = require('path')
 const cac = require('cac')
 const os = require('os')
+const findChrome = require('./find-chrome')
 const platform = os.platform()
 const cli = cac('kmanga-downloader')
 cli.option('--config [path]', 'path for config file')
@@ -41,23 +42,20 @@ async function main() {
       width: 720,
     },
   }
-  if (options.executablePath) {
-    launchOption.executablePath = options.executablePath
-  } else {
-    const browserFetcher = puppeteer.createBrowserFetcher({
-      path: '.local-chromium',
-    })
-    const revisionInfo = await browserFetcher.download('1002410', (size, totalSize) => {
-      process.stdout.write(`\r Downloading chromium... ${Math.round(size / 1024 / 1024)}MB/${Math.round(totalSize / 1024 / 1024)}MB`)
-      if (size == totalSize) {
-        process.stdout.write('\n')
-      }
-    })
-    launchOption.executablePath = revisionInfo.executablePath
-  }
+  const chromium = await findChrome()
+  launchOption.executablePath = chromium.executablePath
   const browser = await puppeteer.launch(launchOption)
   page = await browser.newPage()
+  page.on('request', req => {
+    const type = req.resourceType()
+    if (['image', 'stylesheet', 'font'].includes(type)) {
+      req.abort()
+    } else {
+      req.continue()
+    }
+  })
   await page.setDefaultTimeout(0)
+  await page.setRequestInterception(true)
   if (options.mail || options.password) {
     await login(options.mail, options.password)
   }
